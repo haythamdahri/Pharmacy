@@ -140,17 +140,17 @@ public class BillController extends HttpServlet{
 	}
 	
 	private void add(HttpServletRequest request, HttpServletResponse response) {
-		for( int i=0; i<250000; i++ )
-			System.out.println(i);
+		//for( int i=0; i<250000; i++ )
+		//	System.out.println(i);
 		//Retrive passed params
 		int product_id = Integer.parseInt(request.getParameter("product"));
 		int quantity = Integer.parseInt(request.getParameter("quantity"));
+		Product product = this.productBusiness.find(product_id);
 		Stock stock = this.stockBusiness.findByProduct(product_id);
 		String message = "";
 		if( stock != null ) {
 			if( stock.getQuantity() > 0 ) {
 				if( stock.getQuantity() >= quantity ) {
-					Product product = this.productBusiness.find(product_id);
 					Bill bill = new Bill(0, product, quantity);
 					Bill returned_bill = this.billBusiness.add(bill);
 					if( returned_bill != null ) {
@@ -170,7 +170,7 @@ public class BillController extends HttpServlet{
 				message = "<div class=\"card-panel white-text red darken-1\"><i class=\"left material-icons\">do_not_disturb</i> Le médicament "+stock.getProduct().getName()+" est indisponible.</div>";
 			}
 		}else {
-			message = "<div class=\"card-panel white-text red darken-1\"><i class=\"left material-icons\">do_not_disturb</i> Le médicament "+stock.getProduct().getName()+" est indisponible dans le stock.</div>";
+			message = "<div class=\"card-panel white-text red darken-1\"><i class=\"left material-icons\">do_not_disturb</i> Le médicament "+product.getName()+" est indisponible dans le stock.</div>";
 		}
 		try {
 			response.setCharacterEncoding("UTF-8");
@@ -192,14 +192,22 @@ public class BillController extends HttpServlet{
 			Bill bill = new Bill(0, product, quantity);
 			
 			Stock stock = stockBusiness.findByProduct(product.getId());
-			if( stock.getQuantity() - quantity < 0 ) {
+			
+			if( stock != null ) {
+				if( stock.getQuantity() - quantity < 0 ) {
 				session.setAttribute("bill_add_error", true);
 				session.setAttribute("bill_add_error_message", "La quantité demandée du "+product.getName()+" n'est pas disponible, "+stock.getQuantity()+" unités disponible pour l'instant!");
 				response.sendRedirect(request.getContextPath()+"/bill?add");
 				return;
+				}else {
+					stock.setQuantity(stock.getQuantity() - quantity);
+					stockBusiness.update(stock);
+				}
 			}else {
-				stock.setQuantity(stock.getQuantity() - quantity);
-				stockBusiness.update(stock);
+				session.setAttribute("bill_add_error", true);
+				session.setAttribute("bill_add_error_message", "Le médicament "+product.getName()+" est indisponible dans le stock.");
+				response.sendRedirect(request.getContextPath()+"/bill?add");
+				return;
 			}
 			
 			
