@@ -34,7 +34,7 @@ ICategory categoryBusiness = (CategoryDAO)request.getAttribute("categoryBusiness
       
       <div class="row">
         <div class="input-field col s12">
-          <input id="code" required aria-required="true" value="<%= product.getCode() %>" type="text" name="code" class="validate">
+          <input id="code" required aria-required="true" value="<%= product.getCode() %>" type="number" name="code" class="validate">
           <label for="code">Code</label>
           <span class="helper-text" data-error="Remplir ce champ" data-success="OK"></span>
         </div>

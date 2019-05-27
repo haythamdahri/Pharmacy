@@ -31,7 +31,7 @@ IProduct productBusiness = (ProductDAO)request.getAttribute("productBusiness");
       
       <div class="row">
         <div class="input-field col s12">
-          <input id="FirstQuantity" value="<%= stock.getFirst_quantity() %>" required aria-required="true" type="text" name="first_quantity" class="validate">
+          <input id="FirstQuantity" value="<%= stock.getFirst_quantity() %>" required aria-required="true" type="number" name="first_quantity" class="validate">
           <label for="FirstQuantity">Quantity Initiale</label>
           <span class="helper-text" data-error="Remplir ce champ" data-success="OK"></span>
         </div>
@@ -40,7 +40,7 @@ IProduct productBusiness = (ProductDAO)request.getAttribute("productBusiness");
       
       <div class="row">
         <div class="input-field col s12">
-          <input id="quantity" value="<%= stock.getQuantity() %>" required aria-required="true" type="text" name="quantity" class="validate">
+          <input id="quantity" value="<%= stock.getQuantity() %>" required aria-required="true" type="number" name="quantity" class="validate">
           <label for="quantity">Quantité</label>
           <span class="helper-text" data-error="Remplir ce champ" data-success="OK"></span>
         </div>

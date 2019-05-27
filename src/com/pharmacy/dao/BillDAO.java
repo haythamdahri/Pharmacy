@@ -46,6 +46,7 @@ public class BillDAO implements IBill{
 
 	@Override
 	public Bill add(Bill bill) {
+		System.out.println("Bill: "+bill);
 		Bill returned_bill = null;
 		if( connection != null ) {
 			PreparedStatement st;
